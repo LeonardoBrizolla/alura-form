@@ -1,1 +1,3 @@
-export const InputForm = () => <input type="text" className="input-form" />;
+export const InputForm = ({ id = '', type = 'text' }) => (
+  <input id={id} type={type} className="input-form" />
+);
