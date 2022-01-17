@@ -1,12 +1,13 @@
 import { TextField, Button, FormControlLabel, Switch } from '@material-ui/core';
 import { useState } from 'react';
 
-export const FormAlura = () => {
+export const FormAlura = ({ onSubmit, validaCpf }) => {
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
   const [cpf, setCpf] = useState('');
   const [promocoes, setPromocoes] = useState(false);
   const [novidades, setNovidades] = useState(false);
+  const [errors, setErrors] = useState({ cpf: { valido: true, text: '' } });
 
   return (
     <form
@@ -14,8 +15,7 @@ export const FormAlura = () => {
       className="form-alura"
       onSubmit={(event) => {
         event.preventDefault();
-
-        console.log({ nome, sobrenome, cpf, promocoes, novidades });
+        onSubmit({ nome, sobrenome, cpf, promocoes, novidades });
       }}
     >
       <TextField
@@ -47,6 +47,12 @@ export const FormAlura = () => {
         required
         value={cpf}
         onChange={(event) => setCpf(event.target.value)}
+        error={!errors.cpf.valido}
+        helperText={errors.cpf.text}
+        onBlur={() => {
+          const ehValido = validaCpf(cpf);
+          setErrors({ cpf: ehValido });
+        }}
       />
       <FormControlLabel
         label="Promoções"
