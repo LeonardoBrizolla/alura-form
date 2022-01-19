@@ -1,34 +1,23 @@
 import { useContext, useState } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import { ValidacoesCadastro } from '../../contexts/ValidacoesCadastro';
+import { useErros } from '../../hooks/useErros';
 
 export const FormUsuario = ({ onSubmit }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({ senha: { valido: true, text: '' } });
-
   const validacoes = useContext(ValidacoesCadastro);
 
-  const validaCampos = (event) => {
-    const { name, value } = event.target;
-    const novoEstado = { ...errors };
-    novoEstado[name] = validacoes[name](value);
-    setErrors(novoEstado);
-  };
-
-  const possoEnviar = () => {
-    for (let campo in errors) {
-      if (!errors[campo].valido) return false;
-      return true;
-    }
-  };
+  const [errors, validaCampos, possoEnviar] = useErros(validacoes);
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
 
-        if (possoEnviar()) onSubmit({ email, password });
+        if (possoEnviar()) {
+          return onSubmit({ email, password });
+        }
       }}
     >
       <TextField
@@ -46,7 +35,6 @@ export const FormUsuario = ({ onSubmit }) => {
       <TextField
         value={password}
         onChange={(event) => setPassword(event.target.value)}
-        onBlur={validaCampos}
         error={!errors.senha.valido}
         helperText={errors.senha.text}
         id="password"
@@ -57,6 +45,7 @@ export const FormUsuario = ({ onSubmit }) => {
         margin="normal"
         fullWidth
         required
+        onBlur={validaCampos}
       />
       <Button type="submit" color="primary" variant="contained">
         Próximo
