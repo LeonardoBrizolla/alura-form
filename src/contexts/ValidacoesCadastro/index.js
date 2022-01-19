@@ -1,3 +1,3 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 
-export const ValidacoesCadastro = React.createContext();
+export const ValidacoesCadastro = createContext();
