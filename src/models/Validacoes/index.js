@@ -14,4 +14,6 @@ const validaSenha = (senha) => {
   }
 };
 
-export { validaCpf, validaSenha };
+const semValidacao = () => ({ valido: true, text: '' });
+
+export { validaCpf, validaSenha, semValidacao };
